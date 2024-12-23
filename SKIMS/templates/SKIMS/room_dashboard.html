@@ -1,0 +1,61 @@
+{% extends 'SKIMS/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-10 col-12 mx-auto mt-5">
+            <!-- Add Room Button -->
+            <div class="d-flex justify-content-end">
+                <a href="{% url 'add-room' %}" class="btn btn-primary">Add Room</a>
+            </div>
+
+            <!-- Filter Information -->
+            {% if request.GET.hospital_id %}
+            <div class="alert alert-info mt-3">
+                Showing rooms for hospital:
+                {% if rooms|length > 0 %}
+                    <strong>{{ rooms.0.hospitalName.hospitalName }}</strong>
+                {% else %}
+                    <strong>Unknown Hospital</strong>
+                {% endif %}
+                <a href="{% url 'room-dashboard' %}" class="btn btn-sm btn-outline-secondary">Clear Filter</a>
+            </div>
+            {% endif %}
+
+            <!-- Room Table -->
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Hospital Name</th>
+                    <th scope="col">Room Name</th>
+                    <th scope="col">Floor</th>
+                    <th scope="col">Department</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% if rooms|length == 0 %}
+                    <tr>
+                        <th scope="row" colspan="7" class="text-center">No rooms available.</th>
+                    </tr>
+                    {% else %}
+                        {% for room in rooms %}
+                        <tr>
+                            <th scope="row">{{ room.id }}</th>
+                            <td>{{ room.hospitalName.hospitalName }}</td>
+                            <td>{{ room.roomName }}</td>
+                            <td>{{ room.floor }}</td>
+                            <td>{{ room.department }}</td>
+                            <td><a href="{% url 'rack-dashboard' %}?room_id={{ room.id }}" class="btn btn-outline-secondary">View Racks</a></td>
+                            <td><a href="{% url 'edit-room' room.id %}" class="btn btn-outline-primary">Edit</a></td>
+                            <td><a href="{% url 'delete-room' room.id %}" class="btn btn-outline-danger">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %}

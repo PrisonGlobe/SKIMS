@@ -1,0 +1,29 @@
+/* Search Dropdown Styling */
+#search-results {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+    background-color: white;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    position: absolute;
+    top: 100%;
+    left: 0;
+}
+
+#search-results .dropdown-item {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+#search-results .dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+#search-results .disabled {
+    color: #6c757d;
+    cursor: not-allowed;
+}

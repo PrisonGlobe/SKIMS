@@ -1,0 +1,76 @@
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'index' %}">SKIMS Systems</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto"></ul>
+            <!-- Centered Search Bar -->
+            <form id="search-form" class="d-flex mx-auto position-relative" style="width: 50%; justify-content: center;" autocomplete="off">
+                <input id="search-input" class="form-control me-2" type="text" placeholder="Search supplies" aria-label="Search">
+                <ul id="search-results" class="dropdown-menu w-100" style="display: none; position: absolute; top: 100%; left: 0; z-index: 1000;"></ul>
+            </form>
+            <ul class="navbar-nav ms-auto">
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="#">{{ user.username }}</a>
+                </li>
+                <form action="{% url 'logout' %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button class="btn btn-sm">Log Out</button>
+                </form>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Sign In</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+
+    searchInput.addEventListener('input', function () {
+        const query = searchInput.value;
+
+        if (query.length > 0) {
+            fetch(`/search/?q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    searchResults.innerHTML = ''; // Clear previous results
+                    if (data.length > 0) {
+                        data.forEach(item => {
+                            const listItem = document.createElement('li');
+                            listItem.className = 'dropdown-item'; // Apply Bootstrap dropdown styling
+                            listItem.textContent = item.supplyName; // Set text to the supply name
+                            listItem.onclick = () => window.location.href = item.url; // Navigate to the supply page
+                            searchResults.appendChild(listItem); // Append to the dropdown
+                        });
+                        searchResults.style.display = 'block'; // Make dropdown visible
+                    } else {
+                        searchResults.innerHTML = '<li class="dropdown-item disabled">No results found</li>';
+                        searchResults.style.display = 'block';
+                    }
+                })
+                .catch(error => console.error('Error fetching search results:', error));
+        } else {
+            searchResults.style.display = 'none'; // Hide dropdown when input is cleared
+        }
+    });
+
+    document.addEventListener('click', function (event) {
+        if (!searchInput.contains(event.target) && !searchResults.contains(event.target)) {
+            searchResults.style.display = 'none'; // Close dropdown when clicking outside
+        }
+    });
+});
+</script>

@@ -1,0 +1,63 @@
+{% extends 'SKIMS/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-10 col-12 mx-auto mt-5">
+            <!-- Add bin Button -->
+            <div class="d-flex justify-content-end">
+                <a href="{% url 'add-bin' %}" class="btn btn-primary">Add Bin</a>
+            </div>
+
+            <!-- Filter Information -->
+            {% if request.GET.rack_id %}
+            <div class="alert alert-info mt-3">
+                {% if bins|length > 0 %}
+                    Showing <strong>{{ bins.0.rackName.roomName.hospitalName.hospitalName }}: {{ bins.0.rackName.roomName.roomName }}</strong>
+                bins for the
+                    <strong>{{ bins.0.rackName.rackName }}</strong>
+                {% else %}
+                    Showing bins for rack:
+                    <strong>Unknown room</strong>
+                {% endif %}
+                <a href="{% url 'bin-dashboard' %}" class="btn btn-sm btn-outline-secondary">Clear Filter</a>
+            </div>
+            {% endif %}
+
+            <!-- bin Table -->
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Rack Name</th>
+                    <th scope="col">Bin Name</th>
+                    <th scope="col">Bin Height</th>
+                    <th scope="col">Bin Color</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% if bins|length == 0 %}
+                    <tr>
+                        <th scope="row" colspan="7" class="text-center">No Bins available.</th>
+                    </tr>
+                    {% else %}
+                        {% for bin in bins %}
+                        <tr>
+                            <th scope="row">{{ bin.id }}</th>
+                            <td>{{ bin.rackName.rackName }}</td>
+                            <td>{{ bin.binName }}</td>
+                            <td>{{ bin.binHeight }}</td>
+                            <td>{{ bin.binColor }}</td>
+                            <td><a href="{% url 'supply-dashboard' %}?bin_id={{ bin.id }}" class="btn btn-outline-secondary">View Items</a></td>
+                            <td><a href="{% url 'edit-bin' bin.id %}" class="btn btn-outline-primary">Edit</a></td>
+                            <td><a href="{% url 'delete-bin' bin.id %}" class="btn btn-outline-danger">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %}

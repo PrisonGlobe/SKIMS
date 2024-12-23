@@ -1,0 +1,49 @@
+{% extends 'SKIMS/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-10 col-12 mx-auto mt-5">
+<div style="text-align: center;">
+<h2>{{ supplyName }} Locations</h2>
+    {% if supplyName == 'Scalpel' %}
+    <img src="https://render.fineartamerica.com/images/rendered/default/acrylic-print/10/7/hangingwire/break/images-medium-5/1-gloved-hand-holding-a-disposable-medical-scalpel-claire-paxton--jacqui-farrowscience-photo-library.jpg" alt="Picture of {{ supplyName }}" class="img-fluid mb-4" style="max-width: auto; height: 250px;">
+    {% elif supplyName == '4x4 Gauze' %}
+    <img src="https://pics.walgreens.com/prodimg/484244/450.jpg" alt="Picture of {{ supplyName }}" class="img-fluid mb-4" style="max-width: auto; height: 250px;">
+    {% else %}
+    <img src="https://www.pngitem.com/pimgs/m/200-2007787_no-tools-required-icon-hd-png-download.png" alt="Picture of {{ supplyName }}" class="img-fluid mb-4" style="max-width: auto; height: 250px;">
+{% endif %}
+</div>
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Hospital Name</th>
+            <th scope="col">Floor</th>
+            <th scope="col">Room Name</th>
+            <th scope="col">Rack Name</th>
+            <th scope="col">Bin Name</th>
+            <th scope="col">Supply quantity</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for supply in supply_items %}
+        <tr>
+            <td>{{ supply.binName.rackName.roomName.hospitalName }}</td>
+            <td>{{ supply.binName.rackName.roomName.floor }}</td>
+            <td>{{ supply.binName.rackName.roomName }}</td>
+            <td>{{ supply.binName.rackName }}</td>
+            <td>{{ supply.binName.binName }}</td>
+            <td>{{ supply.quantity }}</td>
+            <td></td>
+            <td></td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+        </div>
+    </div>
+{% endblock %}
