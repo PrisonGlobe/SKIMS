@@ -185,6 +185,21 @@ class SupplyDashboard(LoginRequiredMixin, View):
             supplies = SupplyItem.objects.filter(user=self.request.user.id).order_by('id')  # Default: all rooms for the user
         return render(request, 'SKIMS/supply_dashboard.html', {'supplies': supplies})
 
+class RackSupplyDashboard(LoginRequiredMixin, View):
+    def get(self, request):
+        rack_id = request.GET.get('rack_id')  # Get rack_id from query parameters
+        if rack_id:
+            # Follow relationships from SupplyItem -> Bin -> Rack
+            supplies = SupplyItem.objects.filter(
+                user=self.request.user.id,
+                binName__rackName_id=rack_id  # Use __ to follow the relationship
+            ).order_by('id')
+        else:
+            # Default: all supplies for the user
+            supplies = SupplyItem.objects.filter(user=self.request.user.id).order_by('id')
+
+        return render(request, 'SKIMS/rack_supply_dashboard.html', {'supplies': supplies})
+
 
 class AddSupply(LoginRequiredMixin, CreateView):
     model = SupplyItem
@@ -242,4 +257,7 @@ def supply_search(request):
     else:
         data = []
     return JsonResponse(data, safe=False)
+
+
+
 

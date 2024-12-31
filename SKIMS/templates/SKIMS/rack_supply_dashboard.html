@@ -1,0 +1,67 @@
+{% extends 'SKIMS/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-10 col-12 mx-auto mt-5">
+            <!-- Add Supply Button -->
+            <div class="d-flex justify-content-end">
+                <a href="{% url 'add-supply' %}" class="btn btn-primary">Add Supply</a>
+            </div>
+
+            <!-- Filter Information -->
+            {% if request.GET.bin_id %}
+            <div class="alert alert-info mt-3">
+                {% if supplies|length > 0 %}
+                    Showing <strong>{{ supplies.0.binName.rackName.roomName.hospitalName.hospitalName }}: {{ supplies.0.binName.rackName.roomName.roomName }}:
+                {{ supplies.0.binName.rackName.rackName }}</strong>
+                supplies for all Bins
+                {% else %}
+                    Showing bins for rack:
+                    <strong>Unknown room</strong>
+                {% endif %}
+                <a href="{% url 'supply-dashboard' %}" class="btn btn-sm btn-outline-secondary">Clear Filter</a>
+            </div>
+            {% endif %}
+
+            <!-- Supply Table -->
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Rack Name</th>
+                    <th scope="col">Bin Name</th>
+                    <th scope="col">Supply Name</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Vendor</th>
+                    <th scope="col">Reference Number</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% if supplies|length == 0 %}
+                    <tr>
+                        <th scope="row" colspan="7" class="text-center">No supplies available.</th>
+                    </tr>
+                    {% else %}
+                        {% for supply in supplies %}
+                        <tr>
+                            <th scope="row">{{ supply.id }}</th>
+                            <td>{{ supply.binName.rackName.rackName }}</td>
+                            <td>{{ supply.binName.binName }}</td>
+                            <td>{{ supply.supplyName }}</td>
+                            <td>{{ supply.quantity }}</td>
+                            <td>{{ supply.vendor }}</td>
+                            <td>{{ supply.refNum }}</td>
+                            <td><a href="{% url 'supply-item-dashboard' supply.supplyName %}" class="btn btn-info">View Supply</a></td>
+                            <td><a href="{% url 'edit-supply' supply.id %}" class="btn btn-outline-primary">Edit</a></td>
+                            <td><a href="{% url 'delete-supply' supply.id %}" class="btn btn-outline-danger">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %}

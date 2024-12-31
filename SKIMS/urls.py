@@ -3,7 +3,7 @@ from django.urls import path
 from .views import Index, SignUpView, SupplyDashboard, AddSupply, EditSupply, DeleteSupply, SupplyItemDashboard
 from .views import HospitalDashboard, AddHospital, EditHospital, DeleteHospital
 from .views import RoomDashboard, AddRoom, EditRoom, DeleteRoom, RackDashboard, AddRack, EditRack, DeleteRack
-from .views import BinDashboard, AddBin, EditBin, DeleteBin, supply_search
+from .views import BinDashboard, AddBin, EditBin, DeleteBin, supply_search, RackSupplyDashboard
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import LogoutView
 from django.conf import settings
@@ -21,6 +21,7 @@ urlpatterns = [
     path('delete-supply/<int:pk>', DeleteSupply.as_view(), name='delete-supply'),
     path('supply-dashboard/', SupplyDashboard.as_view(), name='supply-dashboard'),
     path('supply-item-dashboard/<str:supplyName>/', SupplyItemDashboard.as_view(), name='supply-item-dashboard'),
+
     # Hospital Item
     path('hospital-dashboard/', HospitalDashboard.as_view(), name='hospital-dashboard'),
     path('add-hospital/', AddHospital.as_view(), name='add-hospital'),
@@ -36,6 +37,8 @@ urlpatterns = [
     path('add-rack/', AddRack.as_view(), name='add-rack'),
     path('edit-rack/<int:pk>', EditRack.as_view(), name='edit-rack'),
     path('delete-rack/<int:pk>', DeleteRack.as_view(), name='delete-rack'),
+    path('rack-supply-dashboard/', RackSupplyDashboard.as_view(), name='rack-supply-dashboard'),
+
     # Bin Item
     path('bin-dashboard/', BinDashboard.as_view(), name='bin-dashboard'),
     path('add-bin/', AddBin.as_view(), name='add-bin'),

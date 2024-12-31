@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
 import os
 
 
@@ -27,7 +28,7 @@ SECRET_KEY = "django-insecure-6@i=r_mlou78*nwv1+s71(58mj*$iaz058k&%8qy%p-hm44+xz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['.vercel.app','127.0.0.1']
 
 
 # Application definition
@@ -77,15 +78,21 @@ WSGI_APPLICATION = "SKIMS_Systems.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+#
+#DATABASES = {
+#    "default": {
+#        "ENGINE": "django.db.backends.sqlite3",
+#        "NAME": BASE_DIR / "db.sqlite3",
+#    }
+#}
+
+# PostgreSQL
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+
+    'default': dj_database_url.parse('postgresql://skims_user:9FK1UTyn9rCLY15qzitmkPn793h6Ec8J@dpg-ctpft0qj1k6c739jfa3g-a.ohio-postgres.render.com/skims')
+
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -131,6 +138,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK ="bootstrap5"
 
-LOGIN_REDIRECT_URL = '/dashboard'
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login'
 LOGIN_URL = 'login'
